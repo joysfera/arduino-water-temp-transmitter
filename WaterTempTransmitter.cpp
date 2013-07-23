@@ -32,8 +32,7 @@ void WaterTempTransmitter::send(float temperature, bool battery, bool beep)
     // Checksum (summatory of nibbles +1)
     unsigned long temppacket=packet;
     byte checksum= (byte)temppacket;
-    byte i;
-    for(i=1;i<7;i++)
+    for(byte i=1;i<7;i++)
         checksum+=(temppacket >>= 4);
     checksum-=1;
 
@@ -52,8 +51,7 @@ void WaterTempTransmitter::sendPacket(byte pin, unsigned long packet, byte nbits
     digitalWrite(pin, LOW);
     delayMicroseconds(WTT_PREAMBLE);
 
-    int8_t i;
-    for(i=(nbits-1);i>=0;i--)
+    for(int8_t i=(nbits-1);i>=0;i--)
     {
         if( (packet >> i) & 0x00000001)
         {// send 1
@@ -74,8 +72,7 @@ void WaterTempTransmitter::sendPacket(byte pin, unsigned long packet, byte nbits
 
 void WaterTempTransmitter::sendFrame(byte pin, unsigned long packet, byte nbits, byte repetitions)
 {
-    byte j=0;
-    for(j=0;j<repetitions;j++)
+    for(byte j=0;j<repetitions;j++)
         sendPacket(pin, packet, nbits);
 }
 
