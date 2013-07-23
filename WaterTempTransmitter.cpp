@@ -1,11 +1,9 @@
 /************
  * WaterTempTransmitter
+ *
+ * Author: Abdullah Tahiri ( http://alejandro-anv.blogspot.cz/2012/12/hackeando-termometro-inalambrico.html )
+ * Code taken from comment at http://dephiox.blogspot.cz/2012/12/i-recently-stumbeled-over-433-mhz.html
  ************/
-
-// Author: Abdullah Tahiri
-// http://alejandro-anv.blogspot.cz/2012/12/hackeando-termometro-inalambrico.html
-// Code taken from comment below 
-// http://dephiox.blogspot.cz/2012/12/i-recently-stumbeled-over-433-mhz.html
 
 #include "WaterTempTransmitter.h"
 
@@ -40,7 +38,7 @@ void WaterTempTransmitter::send(float temperature, bool battery, bool beep)
     temppacket<<= 24;
     packet|=temppacket;
 
-    sendFrame(_pin,packet,WTT_BITS,WTT_REPETITIONS);
+    sendFrame(_pin, packet, WTT_BITS, WTT_REPETITIONS);
 }
 
 void WaterTempTransmitter::sendPacket(byte pin, unsigned long packet, byte nbits)
