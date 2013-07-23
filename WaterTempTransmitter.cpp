@@ -9,7 +9,7 @@
 
 #include "WaterTempTransmitter.h"
 
-WaterTempTransmitter::WaterTempTransmitter(byte pin, byte id, byte channel)
+WaterTempTransmitter::WaterTempTransmitter(uint8_t pin,uint8_t id, uint8_t channel)
 {
     _pin=pin;
     _id=id;
@@ -17,10 +17,10 @@ WaterTempTransmitter::WaterTempTransmitter(byte pin, byte id, byte channel)
     pinMode(_pin, OUTPUT);
 }
 
-void WaterTempTransmitter::send(float temperature, bool battery, bool beep)
+void WaterTempTransmitter::send(float temperature,bool battery, bool beep)
 {
     int16_t temp= (int16_t)(temperature * 10);
-    unsigned long packet= _id ;
+    uint32_t packet= _id ;
     packet<<= 12;
     packet|= (temp & 0x8000)==0x8000?((temp & 0x07FF) | 0x0800):(temp & 0x07FF);
     packet<<= 2;
@@ -30,9 +30,10 @@ void WaterTempTransmitter::send(float temperature, bool battery, bool beep)
     packet|= (beep==true)?0x1:00;
 
     // Checksum (summatory of nibbles +1)
-    unsigned long temppacket=packet;
-    byte checksum= (byte)temppacket;
-    for(byte i=1;i<7;i++)
+    uint32_t temppacket=packet;
+    uint8_t checksum= (uint8_t)temppacket;
+    uint8_t i;
+    for(i=1;i<7;i++)
         checksum+=(temppacket >>= 4);
     checksum-=1;
 
@@ -40,39 +41,41 @@ void WaterTempTransmitter::send(float temperature, bool battery, bool beep)
     temppacket<<= 24;
     packet|=temppacket;
 
-    sendFrame(_pin,packet,WTT_BITS,WTT_REPETITIONS);
+    sendFrame(_pin,packet,BITS,REPETITIONS);
 }
 
-void WaterTempTransmitter::sendPacket(byte pin, unsigned long packet, byte nbits)
+void WaterTempTransmitter::sendPacket(uint8_t pin, uint32_t packet, uint8_t nbits)
 {
     //send preamble
     digitalWrite(pin, HIGH);
-    delayMicroseconds(WTT_PULSEDURATION);
+    delayMicroseconds(PULSEDURATION);
     digitalWrite(pin, LOW);
-    delayMicroseconds(WTT_PREAMBLE);
+    delayMicroseconds(PREAMBLE);
 
-    for(byte i=(nbits-1);i>=0;i--)
+    int8_t i;
+    for(i=(nbits-1);i>=0;i--)
     {
         if( (packet >> i) & 0x00000001)
         {// send 1
             digitalWrite(pin, HIGH);
-            delayMicroseconds(WTT_PULSEDURATION);
+            delayMicroseconds(PULSEDURATION);
             digitalWrite(pin, LOW);
-            delayMicroseconds(WTT_ONE);
+            delayMicroseconds(ONE);
         } 
         else
         {// send 0
             digitalWrite(pin, HIGH);
-            delayMicroseconds(WTT_PULSEDURATION);
+            delayMicroseconds(PULSEDURATION);
             digitalWrite(pin, LOW);
-            delayMicroseconds(WTT_ZERO); 
+            delayMicroseconds(ZERO); 
         }
     }
 }
 
-void WaterTempTransmitter::sendFrame(byte pin, unsigned long packet, byte nbits, byte repetitions)
+void WaterTempTransmitter::sendFrame(uint8_t pin, uint32_t packet, uint8_t nbits, uint8_t repetitions)
 {
-    for(byte j=0;j<repetitions;j++)
+    uint8_t j=0;
+    for(j=0;j<repetitions;j++)
         sendPacket(pin, packet, nbits);
 }
 
