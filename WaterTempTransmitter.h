@@ -3,13 +3,12 @@
 
 #include <Arduino.h>
 
-#define TXPIN 2
-#define PULSEDURATION 500
-#define ZERO 2000
-#define ONE 4500
-#define PREAMBLE 9500
-#define BITS 28
-#define REPETITIONS 8
+#define WTT_PULSEDURATION 500
+#define WTT_ZERO 2000
+#define WTT_ONE 4500
+#define WTT_PREAMBLE 9500
+#define WTT_BITS 28
+#define WTT_REPETITIONS 8
 
 class WaterTempTransmitter {
 public:

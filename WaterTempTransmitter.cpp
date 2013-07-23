@@ -41,16 +41,16 @@ void WaterTempTransmitter::send(float temperature,bool battery, bool beep)
     temppacket<<= 24;
     packet|=temppacket;
 
-    sendFrame(_pin,packet,BITS,REPETITIONS);
+    sendFrame(_pin,packet,WTT_BITS,WTT_REPETITIONS);
 }
 
 void WaterTempTransmitter::sendPacket(uint8_t pin, uint32_t packet, uint8_t nbits)
 {
     //send preamble
     digitalWrite(pin, HIGH);
-    delayMicroseconds(PULSEDURATION);
+    delayMicroseconds(WTT_PULSEDURATION);
     digitalWrite(pin, LOW);
-    delayMicroseconds(PREAMBLE);
+    delayMicroseconds(WTT_PREAMBLE);
 
     int8_t i;
     for(i=(nbits-1);i>=0;i--)
@@ -58,16 +58,16 @@ void WaterTempTransmitter::sendPacket(uint8_t pin, uint32_t packet, uint8_t nbit
         if( (packet >> i) & 0x00000001)
         {// send 1
             digitalWrite(pin, HIGH);
-            delayMicroseconds(PULSEDURATION);
+            delayMicroseconds(WTT_PULSEDURATION);
             digitalWrite(pin, LOW);
-            delayMicroseconds(ONE);
+            delayMicroseconds(WTT_ONE);
         } 
         else
         {// send 0
             digitalWrite(pin, HIGH);
-            delayMicroseconds(PULSEDURATION);
+            delayMicroseconds(WTT_PULSEDURATION);
             digitalWrite(pin, LOW);
-            delayMicroseconds(ZERO); 
+            delayMicroseconds(WTT_ZERO); 
         }
     }
 }
