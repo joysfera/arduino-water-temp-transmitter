@@ -3,6 +3,9 @@
  *
  * Author: Abdullah Tahiri ( http://alejandro-anv.blogspot.cz/2012/12/hackeando-termometro-inalambrico.html )
  * Code taken from comment at http://dephiox.blogspot.cz/2012/12/i-recently-stumbeled-over-433-mhz.html
+ *
+ * Micro cleanup by Petr Stehlik
+ * 2 years later found original at https://github.com/abdullahtahiriyo/RemoteTransmitter
  ************/
 
 #include "WaterTempTransmitter.h"
